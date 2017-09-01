@@ -1,0 +1,1 @@
+<CO_FW_DIR_PATH>d:\ISC_TestBench\Testplans_S20XL_BMW_ASCM5_ISC_Framework<CO_FW_DIR_PATH>
