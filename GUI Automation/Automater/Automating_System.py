@@ -115,7 +115,6 @@ class Process_Container(object):
     def runTest(self, testname):
         time.sleep(1)
         ag.hotkey('enter')
-        self.init_instruments()
         self.moveto.click_to('Plugin_Panel')
         time.sleep(2)
         self.moveto.click_to('Variation_Plugin')
@@ -147,22 +146,6 @@ class Process_Container(object):
             ag.keyDown('altright')
             ag.hotkey('q')
             ag.keyUp('altright')
-
-    def init_instruments(self):
-        self.moveto.click_to('CAN1', double=True)
-        time.sleep(5)
-        self.moveto.click_to('CAN2', double=True)
-        time.sleep(5)
-        self.moveto.click_to('Colibri1', double=True)
-        time.sleep(1)
-        self.moveto.click_to('Fxr1', double=True)
-        time.sleep(1)
-        self.moveto.click_to('Fxr2', double=True)
-        time.sleep(1)
-        self.moveto.click_to('MFSAT0', double=True)
-        time.sleep(1)
-        self.moveto.click_to('PS1', double=True)
-        time.sleep(1)
 
     def preprocess(self, text):
         """Pyautogui typewrite function have a bug this function prevent the bug."""

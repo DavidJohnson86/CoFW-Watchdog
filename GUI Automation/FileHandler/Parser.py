@@ -20,11 +20,25 @@ class XmlParser(object):
 
     XML_ATTRS = {}
     XML_FAILED = []
+    XML_CONFIG = {}
 
     def __init__(self, source):
         INFILE = etree.parse(source)
         self.INFILE_ROOT = INFILE.getroot()
         # self.get_allfailedobject()
+
+    def get_config(self):
+        XmlParser.XML_CONFIG['COFWDIRPATH'] = self.INFILE_ROOT.xpath(
+            "//Configuration//COFWDIRPATH/text()")[0]
+        XmlParser.XML_CONFIG['COFWPATH'] = self.INFILE_ROOT.xpath(
+            "//Configuration//COFWPATH/text()")[0]
+        XmlParser.XML_CONFIG['COFWEXE'] = self.INFILE_ROOT.xpath(
+            "//Configuration//COFWEXE/text()")[0]
+        XmlParser.XML_CONFIG['REPORT'] = self.INFILE_ROOT.xpath("//Configuration//REPORT/text()")[0]
+        XmlParser.XML_CONFIG['TESTLISTPATH'] = self.INFILE_ROOT.xpath(
+            "//Configuration//TESTLISTPATH/text()")[0]
+        XmlParser.XML_CONFIG['TESTLISTSAMPLE'] = self.INFILE_ROOT.xpath(
+            "//Configuration//TESTLISTSAMPLE/text()")[0]
 
     def get_testnames(self):
         try:

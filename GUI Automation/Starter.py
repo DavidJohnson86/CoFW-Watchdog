@@ -3,6 +3,7 @@
 
 from WatchDog import Sentinel
 import os
+from FileHandler import Parser
 
 """
 =============================================================================================
@@ -62,6 +63,7 @@ Requirements:
 
 
 
+
 HISTORY:
 Revision 0.3:
 - Added Configurator Class.
@@ -73,19 +75,28 @@ Revision 0.4 :
 -Added Logger Functions
 -Removed TestConfig Attribute getter from the Parser because it was redundant
 
+Revision 0.5:
+- Added new property to configurator Class ISC_Framework
+- If ISC_Framework is True Run Subprocess with the correct Instrument Init Parameter
+- Created Executable with cx_Freeze : python setup.py buid command required.
+
+
 IMPROVEMENTS NEEDED:
--https://pyautogui.readthedocs.io/en/latest/introduction.html#dependencies
--Detects if the Test is finished.
-- Not always parse from Alle.tl if the test is finished. Crate a new TL with the failed ones.
--Remove Hardcodes strings
--Add Logging Functions
--Wait Time Issues Handling
--Logger Improvements.
--Be able to Detect Object Reference Error.
--Find Solution for PyAutoGUI typewriter bug Handling.
--Find Solution for Running Compa Framework with Instrument Parameters.
--Create Executable.
--Move is if freezed function from Sentinel to Automating System this will save imports
+https://pyautogui.readthedocs.io/en/latest/introduction.html#dependencies
+·    Detect If Test has been completed and rerun the Failed Testcases.
+·    Develop more smart picture recognition scheme
+·    Develop GUI
+·    Develop better FAIL SAFE Function for Human Control
+·    Develop more detailed logger with the following attributes: Cause of Freeze, Status Percent, DTC-s of failed testcases.
+·    Remove Hard coded strings
+·    Handle PyAutoGUI typewriter bug
+·    Rework it to work without problems with ISC & Compa Framework
+·    Create Executable
+·    Make it Fully Portable and Configurable
+·    Remove Hardcodes strings
+·    Wait Time Flexibility
+·    Semantical Improvement Move is_it_freezed function from Sentinel to Automating System
+    this will save imports
 =============================================================================================
 """
 
@@ -93,14 +104,18 @@ IMPROVEMENTS NEEDED:
 class Configurator(object):
 
     def __init__(self):
-        self.__CO_FW_DIR_PATH = r'd:\ISC_TestBench\Testplans_S20XL_BMW_ASCM5_ISC_Framework'
-        self.__CO_FW_PATH = self.CO_FW_DIR_PATH + '\\' + 'Framework' + '\\'
-        self.__CO_FW_EXE = self.CO_FW_PATH + 'CoFramework.exe'
-        self.__REPORT_PATH = self.CO_FW_DIR_PATH + '\\' + 'Reports' + '\\'
-        self.__TESTLISTPATH = self.CO_FW_DIR_PATH + '\\' + 'Testplans\BMW_ACSM5\config\TestList'
-        self.__TESTLIST_SAMPLE = self.CO_FW_DIR_PATH + '\\' + \
-            'Testplans\BMW_ACSM5\config\TestList\ALLE.tl'
+        self.__CO_FW_DIR_PATH = Parser.XmlParser.XML_CONFIG['COFWDIRPATH']
+        self.__CO_FW_PATH = Parser.XmlParser.XML_CONFIG['COFWPATH']
+        self.__CO_FW_EXE = Parser.XmlParser.XML_CONFIG['COFWEXE']
+        self.__REPORT_PATH = Parser.XmlParser.XML_CONFIG['REPORT']
+        self.__TESTLISTPATH = Parser.XmlParser.XML_CONFIG['TESTLISTPATH']
+        self.__TESTLIST_SAMPLE = Parser.XmlParser.XML_CONFIG['TESTLISTSAMPLE']
+        self.__ISC_FRAMEWORK = True
+
+    def start(self):
         os.chdir(self.CO_FW_DIR_PATH)
+        run = Sentinel.FreezeDetect()
+        run.watchdogTimer()
 
     @property
     def CO_FW_DIR_PATH(self):
@@ -125,6 +140,10 @@ class Configurator(object):
     @property
     def TESTLIST_SAMPLE(self):
         return self.__TESTLIST_SAMPLE
+
+    @property
+    def ISC_FRAMEWORK(self):
+        return self.__ISC_FRAMEWORK
 
     @CO_FW_DIR_PATH.setter
     def CO_FW_DIR_PATH(self, value):
@@ -152,6 +171,6 @@ class Configurator(object):
 
 
 if __name__ == "__main__":
-    PROGRAM_NAME, WAIT_TIME = 'CoFramework.exe', 3
-    prog = Sentinel.FreezeDetect(PROGRAM_NAME, Configurator().CO_FW_PATH, WAIT_TIME)
-    prog.watchdogTimer()
+    config_source = os.path.dirname(os.path.realpath(__file__)) + "\\" + 'Config/CoFW_Wathcdog.xml'
+    Parser.XmlParser(config_source).get_config()
+    Configurator().start()

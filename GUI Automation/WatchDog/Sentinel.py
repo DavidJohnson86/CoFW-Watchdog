@@ -4,8 +4,7 @@
 import sys
 import os
 from time import sleep
-import subprocess
-from time import gmtime, strftime
+from subprocess import Popen, PIPE, check_output
 from threading import Thread, Timer
 from Automater import Automating_System
 from FileHandler import FileHandler, Parser
@@ -34,16 +33,14 @@ ON_POSIX = 'posix' in sys.builtin_module_names
 
 class FreezeDetect(Configurator):
 
-    def __init__(self, program, file_loc, MAX_WAIT_TIME):
+    def __init__(self):
         Configurator.__init__(self)
-        self.program = program
-        self.file_loc = file_loc
-        self.MAX_WAIT_TIME = MAX_WAIT_TIME
+        self.MAX_WAIT_TIME = 3
 
     def is_it_running(self, program_name):
         '''This Function is check if the Current Process Exist in the Task Manager.'''
         n = 0  # number of instances of the program running
-        prog = [line.split() for line in subprocess.check_output("tasklist").splitlines()]
+        prog = [line.split() for line in check_output("tasklist").splitlines()]
         [prog.pop(e) for e in [0, 1, 2]]  # useless
         for task in prog:
             if task[0] == bytes(program_name, encoding='utf-8'):
@@ -76,7 +73,7 @@ class FreezeDetect(Configurator):
 
         Timer is responsible to run the watchdogTimer Function in every x seconds
         where x == self.MAX_WAIT_TIME.'''
-        if (self.is_it_running(self.program)) == False:
+        if (self.is_it_running(self.CO_FW_EXE)) == False:
             #-- If the The Framework not exist in the process execute the following steps.
                 #-- Create a thread to reopen the Framework and run the Automated Processes with PyautoGUI
             print("[CONSOLE]:Framework has been closed restarting it.")
@@ -93,7 +90,10 @@ class FreezeDetect(Configurator):
 
     def doafterFreeze(self):
         '''Open The requested Program'''
-        os.system(self.file_loc + self.program)
+        if (self.ISC_FRAMEWORK is True):
+            command = 'start ./Framework/CoFramework.exe /u developer /InstrumentRegistry.OpenInstruments FXR1,FXR2,CAN1,CAN2,Colibri1,MFSAT0,PS1'
+        process = Popen(command, shell=True, stdout=PIPE)
+        process.wait()
 
     def runprocesses(self):
         '''The function is looking for XML files in the directory. If found the Parser
