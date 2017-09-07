@@ -9,19 +9,13 @@ from threading import Thread, Timer
 from Automater import Automating_System
 from FileHandler import FileHandler, Parser
 from Starter import Configurator
+from WatchDog import InterruptHandlerGUI
+
 
 try:
     from Queue import Queue, Empty
 except ImportError:
     from queue import Queue, Empty
-try:
-    import cv2
-except ImportError:
-    print ('Cv2 not installed')
-try:
-    import numpy as np
-except ImportError:
-    print ('Numpy Is not installed.')
 try:
     import pyautogui as ag
 except ImportError:
@@ -33,9 +27,13 @@ ON_POSIX = 'posix' in sys.builtin_module_names
 
 class FreezeDetect(Configurator):
 
+    console_message = Queue()
+    console_message.put('[CONSOLE]: Framework Init Success')
+
     def __init__(self):
         Configurator.__init__(self)
         self.MAX_WAIT_TIME = 3
+        #Console = InterruptHandlerGUI.GUI()
 
     def is_it_running(self, program_name):
         '''This Function is check if the Current Process Exist in the Task Manager.'''
@@ -50,38 +48,24 @@ class FreezeDetect(Configurator):
         else:
             return False
 
-    def is_it_freezed(self, pattern, treshold=0.8):
-        '''This Function is Detecting if the Compa Framewok stopped working window pops up. '''
-        obj = Automating_System.MouseHandler()
-        obj.takeScreenShot()
-        '''FIX THIS PART
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
-        image = cv2.imread(r"d:\Development\GUI Automation\Automater\tmp\screenshot.jpg", 0)
-        pattern = cv2.imread(r"d:\Development\GUI Automation\Automater\patterns\Freezed.jpg", 0)
-        res = cv2.matchTemplate(image, pattern, cv2.TM_CCOEFF_NORMED)
-        loc = np.where(res >= treshold)
-        loc = list(zip(*loc[::-1]))
-        if(len(loc) >= 1):
-            return True
-        else:
-            return False
-
     def watchdogTimer(self):
-        '''We have to montor 2 events: 1. the program running & 2. the program freezed.
+        '''We have to monitor 2 events: 1. the program running & 2. the program freezed.
         If the program not running its necessary to open it. Anyway opening the program
         will halt the program flow so this should be done on other thread.
-
         Timer is responsible to run the watchdogTimer Function in every x seconds
         where x == self.MAX_WAIT_TIME.'''
-        if (self.is_it_running(self.CO_FW_EXE)) == False:
+        if (self.is_it_running('CoFramework.exe')) == False:
             #-- If the The Framework not exist in the process execute the following steps.
-                #-- Create a thread to reopen the Framework and run the Automated Processes with PyautoGUI
+            #-- Create a thread to reopen the Framework and run the Automated Processes with PyautoGUI
+            #FreezeDetect.console_message.put("[CONSOLE]:Framework has been closed restarting it.")
             print("[CONSOLE]:Framework has been closed restarting it.")
             FileHandler.Logger.logging('Framework has been closed restarting it')
             work = Thread(target=self.doafterFreeze, args=())
             work.start()
             self.runprocesses()
-        if (self.is_it_freezed('Freeze')) == True:
+        elif (Automating_System.MouseHandler.is_it_freezed('Freeze')) == True:
+            #-- This part is checking if window pop up what shows : Compa Framework Stopped working
+            #-- Afterwards window will be closed
             obj = Automating_System.MouseHandler()
             obj.click_to('close')
         ag.hotkey('numlock')
@@ -102,9 +86,11 @@ class FreezeDetect(Configurator):
          '''
         #--Determine what is the latest report
         print ("[CONSOLE]:Getting Latest Report")
+        #FreezeDetect.console_message.put("[CONSOLE]:Getting Latest Report")
         fh = FileHandler.FileHandler(self.REPORT_PATH)
         latest_report = fh.latest_creation_date()
         #--Parsing the Report
+        #FreezeDetect.console_message.put("[CONSOLE]:Parsing Latest Report")
         print ("[CONSOLE]:Parsing Latest Report")
         Report = Parser.XmlParser(latest_report)
         #--Getting the test's names from the TESTLIST_SAMPLE
@@ -118,6 +104,7 @@ class FreezeDetect(Configurator):
             skipped_tests,
             self.TESTLISTPATH,
             self.TESTLIST_SAMPLE)
+        #FreezeDetect.console_message.put("[CONSOLE]:TestList has been created Succesfully")
         print ("[CONSOLE]:TestList has been created Succesfully")
         FileHandler.Logger.logging('TestList has been created Succesfully')
         #===============================================================================
