@@ -4,6 +4,7 @@
 from WatchDog import Sentinel
 import os
 from FileHandler import Parser
+from threading import Thread
 
 """
 =============================================================================================
@@ -99,6 +100,9 @@ https://pyautogui.readthedocs.io/en/latest/introduction.html#dependencies
 
 class Configurator(object):
 
+    #console_message = Queue()
+    #console_message.put('[CONSOLE]: Framework Init Success')
+
     def __init__(self):
         self.__CO_FW_DIR_PATH = Parser.XmlParser.XML_CONFIG['COFWDIRPATH']
         self.__CO_FW_PATH = Parser.XmlParser.XML_CONFIG['COFWPATH']
@@ -110,6 +114,11 @@ class Configurator(object):
 
     def start(self):
         os.chdir(self.CO_FW_DIR_PATH)
+        self.t1 = Thread(target=self.worker)
+        self.t1.start()
+        # App.GUI()
+
+    def worker(self):
         run = Sentinel.FreezeDetect()
         run.watchdogTimer()
 
@@ -167,6 +176,12 @@ class Configurator(object):
 
 
 if __name__ == "__main__":
-    config_source = os.path.dirname(os.path.realpath(__file__)) + '\\Config\CoFW_Wathcdog.xml'
+    try:
+        config_source = os.path.dirname(os.path.realpath(__file__)) + '\\Config\CoFW_Wathcdog.xml'
+    except NameError:  # We are the main py2exe script, not a module
+        import sys
+        config_source = os.path.dirname(
+            os.path.realpath(
+                (sys.argv[0]))) + '\\Config\CoFW_Wathcdog.xml'
     Parser.XmlParser(config_source).get_config()
     Configurator().start()

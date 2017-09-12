@@ -12,8 +12,7 @@ import WatchDog
 class GUI():
 
     def __init__(self):
-        self.console_thread = Thread(target=self.IO_Interrupt, name='console')
-        self.console_thread.start()
+        self.IO_Interrupt()
 
     def onKeyPress(self, event):
         if (event.keysym) == 'Escape':
@@ -34,8 +33,9 @@ class GUI():
         self.GUI.mainloop()
 
     def Write_Console(self):
-        self.display_text.insert(
+        #print ( WatchDog.Sentinel.FreezeDetect.console_message.get())
+        '''self.display_text.insert(
             'end',
             chars=WatchDog.Sentinel.FreezeDetect.console_message.get() +
-            '\n')
+            '\n')'''
         self.GUI.after(1000, self.Write_Console)

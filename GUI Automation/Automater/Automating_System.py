@@ -92,7 +92,7 @@ class MouseHandler():
             os.path.dirname(
                 os.path.realpath(__file__)) +
             "\\" +
-            "tmp/screenshot.jpg",
+            "tmp\screenshot.jpg",
             0)
         pattern = cv2.imread(
             os.path.dirname(
@@ -113,10 +113,20 @@ class MouseHandler():
     def is_it_freezed(pattern, treshold=0.8):
         '''This Function is Detecting if the Compa Framewok stopped working window pops up. '''
         MouseHandler.takeScreenShot()
-        '''FIX THIS PART
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
-        image = cv2.imread(r"d:\Development\GUI Automation\Automater\tmp\screenshot.jpg", 0)
-        pattern = cv2.imread(r"d:\Development\GUI Automation\Automater\patterns\Freezed.jpg", 0)
+        image = cv2.imread(
+            os.path.dirname(
+                os.path.realpath(__file__)) +
+            "\\" +
+            "tmp\screenshot.jpg",
+            0)
+        pattern = cv2.imread(
+            os.path.dirname(
+                os.path.realpath(__file__)) +
+            "\\" +
+            "patterns\\" +
+            pattern +
+            ".jpg",
+            0)
         res = cv2.matchTemplate(image, pattern, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= treshold)
         loc = list(zip(*loc[::-1]))

@@ -9,7 +9,6 @@ from threading import Thread, Timer
 from Automater import Automating_System
 from FileHandler import FileHandler, Parser
 from Starter import Configurator
-from WatchDog import InterruptHandlerGUI
 
 
 try:
@@ -26,9 +25,6 @@ ON_POSIX = 'posix' in sys.builtin_module_names
 
 
 class FreezeDetect(Configurator):
-
-    console_message = Queue()
-    console_message.put('[CONSOLE]: Framework Init Success')
 
     def __init__(self):
         Configurator.__init__(self)
@@ -57,13 +53,13 @@ class FreezeDetect(Configurator):
         if (self.is_it_running('CoFramework.exe')) == False:
             #-- If the The Framework not exist in the process execute the following steps.
             #-- Create a thread to reopen the Framework and run the Automated Processes with PyautoGUI
-            #FreezeDetect.console_message.put("[CONSOLE]:Framework has been closed restarting it.")
+            # Configurator.console_message.put("[CONSOLE]:Framework has been closed restarting it.")
             print("[CONSOLE]:Framework has been closed restarting it.")
             FileHandler.Logger.logging('Framework has been closed restarting it')
             work = Thread(target=self.doafterFreeze, args=())
             work.start()
             self.runprocesses()
-        elif (Automating_System.MouseHandler.is_it_freezed('Freeze')) == True:
+        elif (Automating_System.MouseHandler.is_it_freezed('Freezed')) == True:
             #-- This part is checking if window pop up what shows : Compa Framework Stopped working
             #-- Afterwards window will be closed
             obj = Automating_System.MouseHandler()
@@ -90,7 +86,7 @@ class FreezeDetect(Configurator):
         fh = FileHandler.FileHandler(self.REPORT_PATH)
         latest_report = fh.latest_creation_date()
         #--Parsing the Report
-        #FreezeDetect.console_message.put("[CONSOLE]:Parsing Latest Report")
+        #Configurator.console_message.put("[CONSOLE]:Parsing Latest Report")
         print ("[CONSOLE]:Parsing Latest Report")
         Report = Parser.XmlParser(latest_report)
         #--Getting the test's names from the TESTLIST_SAMPLE
@@ -104,7 +100,7 @@ class FreezeDetect(Configurator):
             skipped_tests,
             self.TESTLISTPATH,
             self.TESTLIST_SAMPLE)
-        #FreezeDetect.console_message.put("[CONSOLE]:TestList has been created Succesfully")
+        #Configurator.console_message.put("[CONSOLE]:TestList has been created Succesfully")
         print ("[CONSOLE]:TestList has been created Succesfully")
         FileHandler.Logger.logging('TestList has been created Succesfully')
         #===============================================================================
