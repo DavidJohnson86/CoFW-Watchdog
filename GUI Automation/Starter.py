@@ -4,6 +4,13 @@
 from WatchDog import Sentinel
 import os
 from FileHandler import Parser
+from threading import Thread
+try:
+    from Queue import Queue, Empty
+except ImportError:
+    from queue import Queue, Empty
+from WatchDog import InterruptHandlerGUI as App
+import pyautogui as ag
 
 """
 =============================================================================================
@@ -76,32 +83,35 @@ Revision 0.4 :
 -Removed TestConfig Attribute getter from the Parser because it was redundant
 
 Revision 0.5:
-- Added new property to configurator Class ISC_Framework
-- If ISC_Framework is True Run Subprocess with the correct Instrument Init Parameter
-- Created Executable with cx_Freeze : python setup.py buid command required.
+- Added new property to configurator Class
+- Instrument Init now works with parameters not /w template mathcing
+- Hard coded String Removed. Now Configurator Class parse and XML
+
+Revision 0.6:
+- Added new property for Moushandler Class Failsafe and delay time
+- Redundance improvements
 
 
 IMPROVEMENTS NEEDED:
 https://pyautogui.readthedocs.io/en/latest/introduction.html#dependencies
 ·    Detect If Test has been completed and rerun the Failed Testcases.
+·    Console_message set to toher class porperty
 ·    Develop more smart picture recognition scheme
 ·    Develop GUI
 ·    Develop better FAIL SAFE Function for Human Control
 ·    Develop more detailed logger with the following attributes: Cause of Freeze, Status Percent, DTC-s of failed testcases.
-·    Remove Hard coded strings
-·    Handle PyAutoGUI typewriter bug
-·    Rework it to work without problems with ISC & Compa Framework
-·    Create Executable
-·    Make it Fully Portable and Configurable
-·    Remove Hardcodes strings
 ·    Wait Time Flexibility
-·    Semantical Improvement Move is_it_freezed function from Sentinel to Automating System
-    this will save imports
+·    Create property for Console.Message
+·    Redundance lot of places Configurator imports are available
+·    Configurator Coonsole message maybe other class with static can handle messages
 =============================================================================================
 """
 
 
 class Configurator(object):
+
+    console_message = Queue()
+    console_message.put('[CONSOLE]: Init Success')
 
     def __init__(self):
         self.__CO_FW_DIR_PATH = Parser.XmlParser.XML_CONFIG['COFWDIRPATH']
@@ -110,12 +120,8 @@ class Configurator(object):
         self.__REPORT_PATH = Parser.XmlParser.XML_CONFIG['REPORT']
         self.__TESTLISTPATH = Parser.XmlParser.XML_CONFIG['TESTLISTPATH']
         self.__TESTLIST_SAMPLE = Parser.XmlParser.XML_CONFIG['TESTLISTSAMPLE']
+        self.__PROCESS_NAME = self.__CO_FW_EXE.split('\\')[-1]
         self.__ISC_FRAMEWORK = True
-
-    def start(self):
-        os.chdir(self.CO_FW_DIR_PATH)
-        run = Sentinel.FreezeDetect()
-        run.watchdogTimer()
 
     @property
     def CO_FW_DIR_PATH(self):
@@ -140,6 +146,10 @@ class Configurator(object):
     @property
     def TESTLIST_SAMPLE(self):
         return self.__TESTLIST_SAMPLE
+
+    @property
+    def PROCESS_NAME(self):
+        return self.__PROCESS_NAME
 
     @property
     def ISC_FRAMEWORK(self):
@@ -169,8 +179,29 @@ class Configurator(object):
     def TESTLIST_SAMPLE(self, value):
         self.__TESTLIST_SAMPLE = value
 
+    @PROCESS_NAME.setter
+    def PROCESS_NAME(self, value):
+        self.__PROCES_NAME = value
+
+
+def worker():
+    run = Sentinel.FreezeDetect()
+    try:
+        run.watchdogTimer()
+    except ag.FailSafeException:
+        App.GUI.failSafeHandler()
 
 if __name__ == "__main__":
-    config_source = os.path.dirname(os.path.realpath(__file__)) + "\\" + 'Config/CoFW_Wathcdog.xml'
+    try:
+        config_source = os.path.dirname(os.path.realpath(__file__)) + '\\Config\CoFW_Wathcdog.xml'
+    except NameError:  # We are the main CX_Freeze script not the module
+        import sys
+        config_source = os.path.dirname(
+            os.path.realpath(
+                (sys.argv[0]))) + '\\Config\CoFW_Wathcdog.xml'
     Parser.XmlParser(config_source).get_config()
-    Configurator().start()
+    init = Configurator()
+    os.chdir(init.CO_FW_DIR_PATH)
+    workerThread = Thread(target=worker)
+    workerThread.start()
+    App.GUI()
