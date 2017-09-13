@@ -19,6 +19,7 @@ import os
 from time import sleep
 from FileHandler import FileHandler
 from Starter import Configurator
+from Automater import Automating_System
 
 
 try:
@@ -50,8 +51,8 @@ except ImportError:
 class MouseHandler():
 
     def __init__(self):
-        self.fail_safe = True
-        self.delay_time = 0.2
+        self.__fail_safe = True
+        self.__delay_time = 0.2
 
     @property
     def delay_time(self):
@@ -88,20 +89,10 @@ class MouseHandler():
         And clicking there where the subimage found"""
 
         MouseHandler.takeScreenShot()
-        image = cv2.imread(
-            os.path.dirname(
-                os.path.realpath(__file__)) +
-            "\\" +
-            "tmp\screenshot.jpg",
-            0)
-        pattern = cv2.imread(
-            os.path.dirname(
-                os.path.realpath(__file__)) +
-            "\\" +
-            "patterns/" +
-            pattern +
-            ".jpg",
-            0)
+        image = cv2.imread(os.path.dirname(os.path.realpath(__file__)) + "\\" +
+                           "tmp\screenshot.jpg", 0)
+        pattern = cv2.imread(os.path.dirname(os.path.realpath(__file__)) + "\\" +
+                             "patterns/" + pattern + ".jpg", 0)
         res = cv2.matchTemplate(image, pattern, cv2.TM_CCOEFF_NORMED)
         y, x = np.unravel_index(res.argmax(), res.shape)
         if not double:
@@ -113,20 +104,10 @@ class MouseHandler():
     def is_it_freezed(pattern, treshold=0.8):
         '''This Function is Detecting if the Compa Framewok stopped working window pops up. '''
         MouseHandler.takeScreenShot()
-        image = cv2.imread(
-            os.path.dirname(
-                os.path.realpath(__file__)) +
-            "\\" +
-            "tmp\screenshot.jpg",
-            0)
-        pattern = cv2.imread(
-            os.path.dirname(
-                os.path.realpath(__file__)) +
-            "\\" +
-            "patterns\\" +
-            pattern +
-            ".jpg",
-            0)
+        image = cv2.imread(os.path.dirname(os.path.realpath(__file__)) + "\\" +
+                           "tmp\screenshot.jpg", 0)
+        pattern = cv2.imread(os.path.dirname(os.path.realpath(__file__)) + "\\" +
+                             "patterns\\" + pattern + ".jpg", 0)
         res = cv2.matchTemplate(image, pattern, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= treshold)
         loc = list(zip(*loc[::-1]))
@@ -160,7 +141,6 @@ class Process_Container(object):
     def path_converter(self, path):
         '''PyautoGUI typewriter functions is not working well with Compa Framework on any
         other app is fine. This function helps to solve it.'''
-        ag.PAUSE = 0
         testname = path.split('\\')[-1]
         for i in path.split('\\'):
             sleep(1.0)
@@ -170,4 +150,3 @@ class Process_Container(object):
             ag.keyDown('altright')
             ag.hotkey('q')
             ag.keyUp('altright')
-        ag.PAUSE = 2.5
