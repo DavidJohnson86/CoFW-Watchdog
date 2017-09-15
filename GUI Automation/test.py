@@ -1,11 +1,9 @@
-'''
-Created on 2017. szept. 4.
+from time import time
+from time import sleep
 
-@author: SzuroveczD
-'''
-from lxml import etree
+t1 = time()
+sleep(2)
+t2 = time()
 
-source = r'./Config/CoFW_Wathcdog.xml'
-INFILE = etree.parse(source)
-parameter = INFILE.getroot()
-print (parameter.xpath("//Configuration//COFWDIRPATH//text()")[0])
+
+print(t2 - t1)

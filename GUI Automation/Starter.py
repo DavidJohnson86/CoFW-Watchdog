@@ -4,6 +4,13 @@
 from WatchDog import Sentinel
 import os
 from FileHandler import Parser
+from threading import Thread
+try:
+    from Queue import Queue, Empty
+except ImportError:
+    from queue import Queue, Empty
+from WatchDog import InterruptHandlerGUI as App
+import pyautogui as ag
 
 """
 =============================================================================================
@@ -76,101 +83,139 @@ Revision 0.4 :
 -Removed TestConfig Attribute getter from the Parser because it was redundant
 
 Revision 0.5:
-- Added new property to configurator Class ISC_Framework
-- If ISC_Framework is True Run Subprocess with the correct Instrument Init Parameter
-- Created Executable with cx_Freeze : python setup.py buid command required.
+- Added new property to configurator Class
+- Instrument Init now works with parameters not /w template mathcing
+- Hard coded String Removed. Now Configurator Class parse and XML
+
+Revision 0.6:
+- Added new property for Moushandler Class Failsafe and delay time
+- Redundance improvements
+- More better GUI
+
+
+BUGFIXES REQUIRED:
+
+·    Detect If Test has been completed and rerun the Failed Testcases.
+·    Before Automation Process Start check if Framework is running.
 
 
 IMPROVEMENTS NEEDED:
 https://pyautogui.readthedocs.io/en/latest/introduction.html#dependencies
-·    Detect If Test has been completed and rerun the Failed Testcases.
 ·    Develop more smart picture recognition scheme
-·    Develop GUI
-·    Develop better FAIL SAFE Function for Human Control
+-    ThreadPool ???
 ·    Develop more detailed logger with the following attributes: Cause of Freeze, Status Percent, DTC-s of failed testcases.
-·    Remove Hard coded strings
-·    Handle PyAutoGUI typewriter bug
-·    Rework it to work without problems with ISC & Compa Framework
-·    Create Executable
-·    Make it Fully Portable and Configurable
-·    Remove Hardcodes strings
 ·    Wait Time Flexibility
-·    Semantical Improvement Move is_it_freezed function from Sentinel to Automating System
-    this will save imports
+·    Redundance lot of places Configurator imports are available
+·    When Closing GUI windows Destroy all threads. Create Dameon Thread
+-  Duplicated stuff  report = Parser.XmlParser(self.testlist_sample)
+            report.get_all_tests(self.testlist_sample)
 =============================================================================================
 """
 
 
 class Configurator(object):
 
+    console_message = Queue()
+    console_message.put('[CONSOLE]: Init Success')
+
     def __init__(self):
-        self.__CO_FW_DIR_PATH = Parser.XmlParser.XML_CONFIG['COFWDIRPATH']
-        self.__CO_FW_PATH = Parser.XmlParser.XML_CONFIG['COFWPATH']
-        self.__CO_FW_EXE = Parser.XmlParser.XML_CONFIG['COFWEXE']
-        self.__REPORT_PATH = Parser.XmlParser.XML_CONFIG['REPORT']
-        self.__TESTLISTPATH = Parser.XmlParser.XML_CONFIG['TESTLISTPATH']
-        self.__TESTLIST_SAMPLE = Parser.XmlParser.XML_CONFIG['TESTLISTSAMPLE']
-        self.__ISC_FRAMEWORK = True
+        self.__co_fw_dir_path = Parser.XmlParser.XML_CONFIG['COFWDIRPATH']
+        self.__co_fw_path = Parser.XmlParser.XML_CONFIG['COFWPATH']
+        self.__co_fw_exe = Parser.XmlParser.XML_CONFIG['COFWEXE']
+        self.__report_path = Parser.XmlParser.XML_CONFIG['REPORT']
+        self.__testlistpath = Parser.XmlParser.XML_CONFIG['TESTLISTPATH']
+        self.__testlist_sample = Parser.XmlParser.XML_CONFIG['TESTLISTSAMPLE']
+        self.__process_name = self.__co_fw_exe.split('\\')[-1]
+        self.__isc_framework = True
+        self.__finish_detection = True
 
-    def start(self):
-        os.chdir(self.CO_FW_DIR_PATH)
-        run = Sentinel.FreezeDetect()
+    @property
+    def co_fw_dir_path(self):
+        return self.__co_fw_dir_path
+
+    @property
+    def co_fw_path(self):
+        return self.__co_fw_path
+
+    @property
+    def co_fw_exe(self):
+        return self.__co_fw_exe
+
+    @property
+    def report_path(self):
+        return self.__report_path
+
+    @property
+    def testlistpath(self):
+        return self.__testlistpath
+
+    @property
+    def testlist_sample(self):
+        return self.__testlist_sample
+
+    @property
+    def process_name(self):
+        return self.__process_name
+
+    @property
+    def isc_framework(self):
+        return self.__isc_framework
+
+    @property
+    def finish_detection(self):
+        return self.__finish_detection
+
+    @co_fw_dir_path.setter
+    def co_fw_dir_path(self, value):
+        self.__co_fw_dir_path = value
+
+    @co_fw_path.setter
+    def co_fw_path(self, value):
+        self.__co_fw_path = value
+
+    @co_fw_exe.setter
+    def co_fw_exe(self, value):
+        self.__co_fw_exe = value
+
+    @report_path.setter
+    def report_path(self, value):
+        self.__report_path = value
+
+    @testlistpath.setter
+    def testlistpath(self, value):
+        self.__testlistpath = value
+
+    @testlist_sample.setter
+    def testlist_sample(self, value):
+        self.__testlist_sample = value
+
+    @process_name.setter
+    def process_name(self, value):
+        self.__PROCES_NAME = value
+
+    @finish_detection.setter
+    def finish_detection(self, value):
+        self.__co_fw_dir_path = value
+
+
+def worker():
+    run = Sentinel.FreezeDetect()
+    try:
         run.watchdogTimer()
-
-    @property
-    def CO_FW_DIR_PATH(self):
-        return self.__CO_FW_DIR_PATH
-
-    @property
-    def CO_FW_PATH(self):
-        return self.__CO_FW_PATH
-
-    @property
-    def CO_FW_EXE(self):
-        return self.__CO_FW_EXE
-
-    @property
-    def REPORT_PATH(self):
-        return self.__REPORT_PATH
-
-    @property
-    def TESTLISTPATH(self):
-        return self.__TESTLISTPATH
-
-    @property
-    def TESTLIST_SAMPLE(self):
-        return self.__TESTLIST_SAMPLE
-
-    @property
-    def ISC_FRAMEWORK(self):
-        return self.__ISC_FRAMEWORK
-
-    @CO_FW_DIR_PATH.setter
-    def CO_FW_DIR_PATH(self, value):
-        self.__CO_FW_DIR_PATH = value
-
-    @CO_FW_PATH.setter
-    def CO_FW_PATH(self, value):
-        self.__CO_FW_PATH = value
-
-    @CO_FW_EXE.setter
-    def CO_FW_EXE(self, value):
-        self.__CO_FW_EXE = value
-
-    @REPORT_PATH.setter
-    def REPORT_PATH(self, value):
-        self.__REPORT_PATH = value
-
-    @TESTLISTPATH.setter
-    def TESTLISTPATH(self, value):
-        self.__TESTLISTPATH = value
-
-    @TESTLIST_SAMPLE.setter
-    def TESTLIST_SAMPLE(self, value):
-        self.__TESTLIST_SAMPLE = value
-
+    except ag.FailSafeException:
+        App.GUI.failSafeHandler()
 
 if __name__ == "__main__":
-    config_source = os.path.dirname(os.path.realpath(__file__)) + "\\" + 'Config/CoFW_Wathcdog.xml'
+    try:
+        config_source = os.path.dirname(os.path.realpath(__file__)) + '\\Config\CoFW_Wathcdog.xml'
+    except NameError:  # We are the main CX_Freeze script not the module
+        import sys
+        config_source = os.path.dirname(
+            os.path.realpath(
+                (sys.argv[0]))) + '\\Config\CoFW_Wathcdog.xml'
     Parser.XmlParser(config_source).get_config()
-    Configurator().start()
+    init = Configurator()
+    os.chdir(init.co_fw_dir_path)
+    workerThread = Thread(target=worker)
+    workerThread.start()
+    App.GUI()

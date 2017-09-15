@@ -23,8 +23,14 @@ class XmlParser(object):
     XML_CONFIG = {}
 
     def __init__(self, source):
-        INFILE = etree.parse(source)
-        self.INFILE_ROOT = INFILE.getroot()
+        try:
+            INFILE = etree.parse(source)
+            self.INFILE_ROOT = INFILE.getroot()
+        except OSError:
+            return None  # If File not exist or directory not exist
+        except TypeError:
+            return False  # If Directory exist bu
+
         # self.get_allfailedobject()
 
     def get_config(self):
@@ -84,6 +90,9 @@ class ListCreator(object):
     @staticmethod
     def testlist_creator(listofFailed, output, inlist):
         inlist = etree.parse(inlist)
+        '''if listofFailed is None or True or False:
+            inlist.write(str(output) + '\Example.tl')
+            return'''
         row_counter, set_counter = 0, 0
         inlist_root = inlist.getroot()
         for test_sets in range(1, len(inlist_root[0]), 2):

@@ -7,27 +7,26 @@ ntpath.basename("a/b/c")
 class FileHandler(object):
     """Responsible for searching latest report file in a specific directory"""
 
-    def __init__(self, REPORT_PATH):
-        self.REPORT_PATH = REPORT_PATH
+    def __init__(self, report_path):
+        self.report_path = report_path
 
     def latest_creation_date(self):
         """
         Try to get the date that a file was created, falling back to when it was
         last modified if that isn't possible.
         """
-        latest_report = ''
+        latest_report = None
         max_value = 0
-        for fileName in os.listdir(self.REPORT_PATH):
+        for fileName in os.listdir(self.report_path):
             if fileName.endswith(".xml"):
                 if not fileName.endswith("_.xml"):
-                    if (os.path.getctime(self.REPORT_PATH + fileName)) > max_value:
-                        max_value = os.path.getctime(self.REPORT_PATH + fileName)
-                        latest_report = self.REPORT_PATH + fileName
-
+                    if (os.path.getctime(self.report_path + fileName)) > max_value:
+                        max_value = os.path.getctime(self.report_path + fileName)
+                        latest_report = self.report_path + fileName
         return latest_report
 
     def getfiles_dir(self):
-        fileNames = [fileName for fileName in os.listdir(CO_FW_PATH) if fileName.endswith(".xml")]
+        fileNames = [fileName for fileName in os.listdir(co_fw_path) if fileName.endswith(".xml")]
         return fileNames
 
 
