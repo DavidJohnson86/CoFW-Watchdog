@@ -25,10 +25,11 @@ if not os.path.exists('Config'):
 setup(name='CoFW WatchDog',
       version ='1.1',
       description='Co Fw WatchDog',
-      options={"build_exe": {"includes":["numpy","cv2","matplotlib","WatchDog","lxml.etree","lxml._elementpath","pyautogui","numpy.lib.format"],
+      options={"build_exe": {"includes":["numpy","cv2","matplotlib","WatchDog","lxml.etree","lxml._elementpath","pyautogui","numpy.lib.format","psutil"],
       'include_files':[
             os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tk86t.dll'),
             os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tcl86t.dll'),
 			os.path.dirname(os.path.realpath(__file__))+'\\Config',
+			os.path.dirname(os.path.realpath(__file__))+'\\Logs',
 			os.path.dirname(os.path.realpath(__file__))+'\\Doku'],"packages": ["numpy"]}},
       executables = [Executable("Starter.py",base=base)])

@@ -45,6 +45,12 @@ class XmlParser(object):
             "//Configuration//TESTLISTPATH/text()")[0]
         XmlParser.XML_CONFIG['TESTLISTSAMPLE'] = self.INFILE_ROOT.xpath(
             "//Configuration//TESTLISTSAMPLE/text()")[0]
+        XmlParser.XML_CONFIG['BSLASHMODIFIER'] = self.INFILE_ROOT.xpath(
+            "//Configuration//BSLASHMODIFIER/text()")[0]
+        XmlParser.XML_CONFIG['BSLASHBUTTON'] = self.INFILE_ROOT.xpath(
+            "//Configuration//BSLASHBUTTON/text()")[0]
+        XmlParser.XML_CONFIG['ISCFRAMEWORK'] = self.INFILE_ROOT.xpath(
+            "//Configuration//BSLASHBUTTON/text()")[0]
 
     def get_testnames(self):
         try:
@@ -53,20 +59,13 @@ class XmlParser(object):
         except IndexError:
             XmlParser.XML_ATTRS['name'] = ''
 
-    def get_allfailedobject(self):
+    def get_failedtestnames(self):
         ''' Parsing all the nodes with all data where FailedMeasurements > 0'''
         try:
-            XmlParser.XML_FAILED = [element for element in self.INFILE_ROOT.xpath(
+            XmlParser.XML_FAILED = [element[7].attrib['val'] for element in self.INFILE_ROOT.xpath(
                 "//COMPA-REPORT//SEQ[@TestVariationIndex]") if int(element[13].attrib['val']) > 0]
         except IndexError:
             XmlParser.XML_FAILED = []
-
-    def get_failedtestnames(self):
-        try:
-            XmlParser.XML_ATTRS['failed'] = [element[7].attrib['val']
-                                             for element in XmlParser.XML_FAILED]
-        except IndexError:
-            XmlParser.XML_ATTRS['failed'] = ''
 
     def get_all_tests(self, testlist):
         self.TESTLIST = etree.parse(testlist)
@@ -109,6 +108,15 @@ class ListCreator(object):
                     test_states[row_counter - 2] = 1
                     test_status.text = str(test_states)[1:-1:]
                     inlist.write(str(output) + '\Example.tl')
+
+    @staticmethod
+    def check_equal(iterator):
+        '''Check If duplicated element in a list
+        :param: list
+        :return: True if unique
+        :return: False if duplicated element found
+        '''
+        return len(set(iterator)) == len(iterator)
 
 if __name__ == "__main__":
     p = XmlParser(r'd:\System_Behaviour_at_UnderVoltage_Unknown_XmlReport.xml')

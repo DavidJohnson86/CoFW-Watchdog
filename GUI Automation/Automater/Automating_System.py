@@ -16,46 +16,68 @@ $Date: 2017/08/11 12:04:32CEST $
 
 """
 import os
+import sys
+import WatchDog
 from time import sleep
-from ReportHandler import ReportHandler
 from Starter import Configurator
-from Automater import Automating_System
+
 
 try:
     import numpy.core.multiarray
 except ImportError:
-    pass
+    if getattr(sys, 'frozen', False):
+        pass
+    else:
+        print ('numpy.core.multiarry is not found')
 try:
     import numpy as np
 except ImportError:
-    pass
+    if getattr(sys, 'frozen', False):
+        pass
+    else:
+        print ('Numpy is not installed')
 try:
     import matplotlib.pyplot as plt
 except ImportError:
-    pass
+    if getattr(sys, 'frozen', False):
+        pass
+    else:
+        print ('Matplotlib is not installed')
 try:
     from PIL import Image
 except ImportError:
-    pass
+    if getattr(sys, 'frozen', False):
+        pass
+    else:
+        print ('PIL.Image not found')
 try:
     import cv2
 except ImportError:
-    pass
+    if getattr(sys, 'frozen', False):
+        pass
+    else:
+        print ('Cv2 is not installed')
 try:
     from PIL import ImageGrab
 except ImportError:
-    pass
+    if getattr(sys, 'frozen', False):
+        pass
+    else:
+        print ('ImageGrab is not installed')
 try:
     import pyautogui as ag
 except ImportError:
-    pass
+    if getattr(sys, 'frozen', False):
+        pass
+    else:
+        print ('PyautoGUI is not installed')
 
 
 class MouseHandler():
 
     def __init__(self):
-        self.__fail_safe = True
-        self.__delay_time = 0.2
+        self.__fail_safe = False
+        self.__delay_time = 0.4
 
     @property
     def delay_time(self):
@@ -82,8 +104,7 @@ class MouseHandler():
                 os.makedirs(os.path.dirname(os.path.realpath(__file__)) + "\\" + "tmp")
             image.save(os.path.dirname(os.path.realpath(__file__)) + "\\" + "tmp\screenshot.jpg")
         except Exception as e:
-            print("[CONSOLE]:" + str(e))
-            # ReportHandler.Logger.logging(str(e))
+            WatchDog.Sentinel.FreezeDetect.console_log("[CONSOLE]: " + str(e) + " ")
 
     def click_to(self, pattern, double=False):
         """
@@ -120,7 +141,7 @@ class MouseHandler():
             return False
 
 
-class Process_Container(object):
+class Process_Container(object, Configurator):
     """This class is containing all of the important processes
     what is required to deal with CoFw. Mostly related to test execution.
     """
@@ -136,20 +157,23 @@ class Process_Container(object):
         ag.hotkey('enter')
         self.moveto.click_to('Add_Testlist')
         self.path_converter(Configurator().testlistpath + testname)
+        sleep(1)
         ag.hotkey('enter')
         ag.hotkey('enter')
+        sleep(1)
         self.moveto.click_to('run')
         self.moveto.click_to('Run_List')
 
     def path_converter(self, path):
-        '''PyautoGUI typewriter functions is not working well with Compa Framework on any
-        other app is fine. This function helps to solve it.'''
+        '''PyautoGUI typewriter functions is not working well with Compa Framework
+        This function helps to solve it.
+        :param: str: path of the testlist'''
         testname = path.split('\\')[-1]
-        for i in path.split('\\'):
-            sleep(1.0)
-            ag.typewrite(i)
-            if (i == testname):
+        for word in path.split('\\'):
+            sleep(1)
+            ag.typewrite(word)
+            if (word == testname):
                 break
-            ag.keyDown('altright')
-            ag.hotkey('q')
-            ag.keyUp('altright')
+            ag.keyDown(self.bslash_modifier)
+            ag.hotkey(self.bslash_btn)
+            ag.keyUp(self.bslash_modifier)

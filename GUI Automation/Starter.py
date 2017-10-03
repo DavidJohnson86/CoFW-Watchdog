@@ -1,8 +1,8 @@
 
 # -*- coding: utf-8 -*-
 
-from WatchDog import Sentinel
 import os
+from WatchDog import Sentinel
 from ReportHandler import Parser
 from threading import Thread
 from datetime import datetime
@@ -21,8 +21,8 @@ COMPA FRAMEWORK WATCHDOG
                             OBJECT SPECIFICATION
 =============================================================================================
 $ProjectName: BMW ACSM5 $
-$Source: Application.py
-$Revision: 0.3 $
+$Source: Starter.py
+$Revision: 1.1 $
 $Author: David Szurovecz $
 $Date: 2017/08/24 08:24:32CEST $
 
@@ -74,44 +74,43 @@ Requirements:
 
 
 HISTORY:
-Revision 0.3:
+Revision 0.8:
 - Added Configurator Class.
 - Removing TESTLIST MAPPER Dictionary.
 - Added Exception Handling for more functions.
 
-Revision 0.4 :
+Revision 0.9 :
 -Added more System Messages
 -Added Logger Functions
 -Removed TestConfig Attribute getter from the Parser because it was redundant
 
-Revision 0.5:
+Revision 1.0:
 - Added new property to configurator Class
 - Instrument Init now works with parameters not /w template mathcing
 - Hard coded String Removed. Now Configurator Class parse and XML
 
-Revision 0.6:
 - Added new property for Moushandler Class Failsafe and delay time
 - Redundance improvements
 - More better GUI
 - Now Installer Is Available
+- Timestamp now appear after every action on the console window
+- Added Exceptions(No Config file, No Valid Path, Screen Grab failed)
+- Console String Messages has been moved to Logger as Class variables
+- All Threads are Daemon now (If main application quit all threads die)
+- New Exception Handled: object Reference not set to an instance of an object
+- Logger Improved Now(After test finish creates summary about number of freezes and cause of freezes)
 
 
 BUGFIXES REQUIRED:
 
 ·    Detect If Test has been completed and rerun the Failed Testcases.
-
+·    Move Freezedetect.Console_log to other folder
 
 
 IMPROVEMENTS NEEDED:
-https://pyautogui.readthedocs.io/en/latest/introduction.html#dependencies
 ·    Develop more smart picture recognition scheme
-·    Develop more detailed logger with the following attributes: Cause of Freeze, Status Percent, DTC-s of failed testcases.
-·    Redundance lot of places Configurator imports are available
-·    When Closing GUI windows Destroy all threads. Create Dameon Thread
--  Duplicated stuff  report = Parser.XmlParser(self.testlist_sample)
+·    Duplicated stuff  report = Parser.XmlParser(self.testlist_sample)
             report.get_all_tests(self.testlist_sample)
-- Add exception if no config file
-=============================================================================================
 """
 
 
@@ -119,18 +118,20 @@ class Configurator(object):
 
     console_message = Queue()
 
-    def __init__(self):
+    def _init_(self):
         try:
-            self.__timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            self.__co_fw_dir_path = Parser.XmlParser.XML_CONFIG['COFWDIRPATH']
-            self.__co_fw_path = Parser.XmlParser.XML_CONFIG['COFWPATH']
-            self.__co_fw_exe = Parser.XmlParser.XML_CONFIG['COFWEXE']
-            self.__report_path = Parser.XmlParser.XML_CONFIG['REPORT']
-            self.__testlistpath = Parser.XmlParser.XML_CONFIG['TESTLISTPATH']
-            self.__testlist_sample = Parser.XmlParser.XML_CONFIG['TESTLISTSAMPLE']
-            self.__process_name = self.__co_fw_exe.split('\\')[-1]
-            self.__isc_framework = True
-            self.__finish_detection = True
+            self._timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self._co_fw_dir_path = Parser.XmlParser.XML_CONFIG['COFWDIRPATH']
+            self._co_fw_path = Parser.XmlParser.XML_CONFIG['COFWPATH']
+            self._co_fw_exe = Parser.XmlParser.XML_CONFIG['COFWEXE']
+            self._report_path = Parser.XmlParser.XML_CONFIG['REPORT']
+            self._testlistpath = Parser.XmlParser.XML_CONFIG['TESTLISTPATH']
+            self._testlist_sample = Parser.XmlParser.XML_CONFIG['TESTLISTSAMPLE']
+            self._process_name = self._co_fw_exe.split('\\')[-1]
+            self._bslash_modifier = Parser.XmlParser.XML_CONFIG['BSLASHMODIFIER']
+            self._bslash_btn = Parser.XmlParser.XML_CONFIG['BSLASHBUTTON']
+            self._isc_framework = Parser.XmlParser.XML_CONFIG['ISCFRAMEWORK']
+            self._finish_detection = True
             Configurator.console_message.put('[CONSOLE]: Init Success')
         except Exception:
             Configurator.console_message.put('[CONSOLE]: Init Failed. Config Error !')
@@ -139,75 +140,83 @@ class Configurator(object):
 
     @property
     def timestamp(self):
-        return self.__timestamp
+        return self._timestamp
 
     @property
     def co_fw_dir_path(self):
-        return self.__co_fw_dir_path
+        return self._co_fw_dir_path
 
     @property
     def co_fw_path(self):
-        return self.__co_fw_path
+        return self._co_fw_path
 
     @property
     def co_fw_exe(self):
-        return self.__co_fw_exe
+        return self._co_fw_exe
 
     @property
     def report_path(self):
-        return self.__report_path
+        return self._report_path
 
     @property
     def testlistpath(self):
-        return self.__testlistpath
+        return self._testlistpath
 
     @property
     def testlist_sample(self):
-        return self.__testlist_sample
+        return self._testlist_sample
 
     @property
     def process_name(self):
-        return self.__process_name
+        return self._process_name
 
     @property
     def isc_framework(self):
-        return self.__isc_framework
+        return self._isc_framework
 
     @property
     def finish_detection(self):
-        return self.__finish_detection
+        return self._finish_detection
 
     @co_fw_dir_path.setter
     def co_fw_dir_path(self, value):
-        self.__co_fw_dir_path = value
+        self._co_fw_dir_path = value
 
     @co_fw_path.setter
     def co_fw_path(self, value):
-        self.__co_fw_path = value
+        self._co_fw_path = value
 
     @co_fw_exe.setter
     def co_fw_exe(self, value):
-        self.__co_fw_exe = value
+        self._co_fw_exe = value
 
     @report_path.setter
     def report_path(self, value):
-        self.__report_path = value
+        self._report_path = value
 
     @testlistpath.setter
     def testlistpath(self, value):
-        self.__testlistpath = value
+        self._testlistpath = value
 
     @testlist_sample.setter
     def testlist_sample(self, value):
-        self.__testlist_sample = value
+        self._testlist_sample = value
 
     @process_name.setter
     def process_name(self, value):
-        self.__PROCES_NAME = value
+        self._PROCES_NAME = value
 
     @finish_detection.setter
     def finish_detection(self, value):
-        self.__co_fw_dir_path = value
+        self._co_fw_dir_path = value
+
+    @property
+    def bslash_modifier(self):
+        return self._bslash_modifier
+
+    @property
+    def bslash_btn(self):
+        return self._bslash_btn
 
 
 def worker():
@@ -217,7 +226,7 @@ def worker():
     except ag.FailSafeException:
         App.GUI.failSafeHandler()
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     try:
         config_source = os.path.dirname(os.path.realpath(__file__)) + '\\Config\CoFW_Wathcdog.xml'
     except NameError:  # We are the main CX_Freeze script not the module
@@ -225,9 +234,21 @@ if __name__ == "__main__":
         config_source = os.path.dirname(
             os.path.realpath(
                 (sys.argv[0]))) + '\\Config\CoFW_Wathcdog.xml'
-    Parser.XmlParser(config_source).get_config()
+    try:
+        Parser.XmlParser(config_source).get_config()
+    except AttributeError:
+        App.GUI.errorHandler('The Configuration file corrupted or not exist.')
+        os._exit(0)
     init = Configurator()
-    os.chdir(init.co_fw_dir_path)
+    try:
+        os.chdir(init.co_fw_dir_path)
+    except FileNotFoundError:
+        App.GUI.errorHandler(
+            'The PATH not exist what defined in ' +
+            sys.executable +
+            '\Config\WathcDog.xml\nPlease Check the settings in that file.')
+        os._exit(0)
     workerThread = Thread(target=worker)
+    workerThread.daemon = True
     workerThread.start()
     App.GUI()

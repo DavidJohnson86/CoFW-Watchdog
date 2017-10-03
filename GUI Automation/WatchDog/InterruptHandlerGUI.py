@@ -4,6 +4,7 @@ Created on 2017. szept. 7.
 @author: SzuroveczD
 '''
 import tkinter as tk
+from tkinter import messagebox
 import pyautogui as ag
 import os
 try:
@@ -16,7 +17,7 @@ class GUI():
 
     def __init__(self):
         self.GUI = tk.Tk()
-        self.GUI.geometry("600x200+200+200")
+        self.GUI.geometry("700x200+200+200")
         self.scrollbar = tk.Scrollbar(self.GUI)
         self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.GUI.minsize(50, 50)
@@ -40,6 +41,13 @@ class GUI():
     def failSafeHandler():
         os._exit(0)
 
+    @staticmethod
+    def errorHandler(e):
+        import tkinter as tk
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showinfo('Error', e)
+
     def Write_Console(self):
         '''This function is refreshing the Console every 1 sec if any new message available'''
         try:
@@ -59,11 +67,7 @@ class Transfer_Msg():
 
 
 if __name__ == '__main__':
-    Transfer_Msg.CONSOLE_MESSAGE.put(
-        "----------------------------------------------------------------------------------")
-    Transfer_Msg.CONSOLE_MESSAGE.put("  Compa Framework WathcDog is not an offical tool.")
-    Transfer_Msg.CONSOLE_MESSAGE.put("  It helps to execute tests automatically after CoFW crashes")
-    Transfer_Msg.CONSOLE_MESSAGE.put("  To Close Click On GUI Window and Press Escape")
-    Transfer_Msg.CONSOLE_MESSAGE.put(
-        "--------------------------------------------------------------------")
+
+    Transfer_Msg.CONSOLE_MESSAGE.put('Test')
+    Transfer_Msg.CONSOLE_MESSAGE.put('Test')
     GUI()
