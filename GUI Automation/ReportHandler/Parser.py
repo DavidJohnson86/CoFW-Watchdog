@@ -27,8 +27,10 @@ class XmlParser(object):
             INFILE = etree.parse(source)
             self.INFILE_ROOT = INFILE.getroot()
         except OSError:
+            print('Cannot Parse FILE')
             return None  # If File not exist or directory not exist
         except TypeError:
+            print('Cannot Parse FILE')
             return False  # If Directory exist bu
 
         # self.get_allfailedobject()
@@ -50,7 +52,7 @@ class XmlParser(object):
         XmlParser.XML_CONFIG['BSLASHBUTTON'] = self.INFILE_ROOT.xpath(
             "//Configuration//BSLASHBUTTON/text()")[0]
         XmlParser.XML_CONFIG['ISCFRAMEWORK'] = self.INFILE_ROOT.xpath(
-            "//Configuration//BSLASHBUTTON/text()")[0]
+            "//Configuration//ISCFRAMEWORK/text()")[0]
 
     def get_testnames(self):
         try:
@@ -82,6 +84,24 @@ class XmlParser(object):
                 self.INFILE_ROOT[-1][8].attrib['val']).split('\\')[-1]
         except IndexError:
             XmlParser.XML_ATTRS['testconfig'] = ''
+
+    @staticmethod
+    def delete_failedtest(source, listofFailed, output):
+        '''
+        :param: list of failed tests
+        :return: number of failed tests and the removed failed tests
+        '''
+        tree = etree.parse(source)
+        root = tree.getroot()
+        counter = 0
+        removed_tests = []
+        for elem in root:
+            if elem[7].attrib['val'] in listofFailed:
+                root.remove(elem)
+                removed_tests.append(elem[7].attrib['val'])
+                counter += 1
+        tree.write(output, xml_declaration=True)
+        return counter, removed_tests
 
 
 class ListCreator(object):
@@ -119,16 +139,16 @@ class ListCreator(object):
         return len(set(iterator)) == len(iterator)
 
 if __name__ == "__main__":
-    p = XmlParser(r'd:\System_Behaviour_at_UnderVoltage_Unknown_XmlReport.xml')
-    #===========================================================================
-    # p.get_all_tests(etree.parse(
-    #     r'd:\10_Development\Python\TL_Creater\DataBase\TestLists\System_Behav_at_UnderVoltage_HW6_28FL\System_Behaviour_Undervoltage_HW6.xml'))
-    # all_test = XmlParser.XML_ATTRS['all']
-    # p.get_testnames()
+    p = XmlParser(r'd:\temp\ISC_Sensor_Emulation_Unknown_XmlReport.xml')
+    p.get_failedtestnames()
+    listofFailed = XmlParser.XML_FAILED
     # executed_tests = (XmlParser.XML_ATTRS['name'])
     # skipped_tests = [i for i in all_test if i not in executed_tests]
     # ListCreator.testlist_creator(skipped_tests, 'd:', etree.parse(
     #     r'd:\10_Development\Python\TL_Creater\DataBase\TestLists\System_Behav_at_UnderVoltage_HW6_28FL\System_Behaviour_Undervoltage_HW6.xml'))
     #===========================================================================
-    p.get_testconfig()
-    print (XmlParser.XML_ATTRS['testconfig'])
+    print (
+        XmlParser.delete_failedtest(
+            r'd:\temp\ISC_Sensor_Emulation_Unknown_XmlReport.xml',
+            listofFailed,
+            r'd:\temp\ISC_Sensor_Emulation_Unknown_XmlReport.xml'))

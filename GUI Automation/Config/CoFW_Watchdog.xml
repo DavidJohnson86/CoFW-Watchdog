@@ -1,0 +1,11 @@
+<Configuration>
+<COFWDIRPATH>d:\ISC_TestBench\Testplans_S20XL_BMW_ASCM5_ISC_Framework\</COFWDIRPATH>
+<COFWPATH>d:\ISC_TestBench\Testplans_S20XL_BMW_ASCM5_ISC_Framework\Framework\</COFWPATH>
+<COFWEXE>d:\ISC_TestBench\Testplans_S20XL_BMW_ASCM5_ISC_Framework\Framework\CoFramework.exe</COFWEXE>
+<REPORT>d:\ISC_TestBench\Testplans_S20XL_BMW_ASCM5_ISC_Framework\Reports\</REPORT>
+<TESTLISTPATH>d:\ISC_TestBench\Testplans_S20XL_BMW_ASCM5_ISC_Framework\Testplans\BMW_ACSM5\config\TestList</TESTLISTPATH>
+<TESTLISTSAMPLE>d:\ISC_TestBench\Testplans_S20XL_BMW_ASCM5_ISC_Framework\Testplans\BMW_ACSM5\config\TestList\Sensor_Emulation.tl</TESTLISTSAMPLE>
+<ISCFRAMEWORK>True</ISCFRAMEWORK>
+<BSLASHMODIFIER>altright</BSLASHMODIFIER>
+<BSLASHBUTTON>q</BSLASHBUTTON>
+</Configuration>

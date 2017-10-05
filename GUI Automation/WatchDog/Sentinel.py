@@ -1,10 +1,11 @@
 
 # -*- coding: utf-8 -*-
 import pyautogui as ag
+import os
 from os import _exit
 from psutil import process_iter
 from time import sleep
-from subprocess import Popen, PIPE, check_output
+from subprocess import Popen, PIPE, check_output, call
 from threading import Thread, Timer
 from Automater import Automating_System
 from ReportHandler.ReportHandler import ReportHandler
@@ -28,8 +29,7 @@ except ImportError:
         print ('PyautoGUI is not installed')
 
 
-class FreezeDetect(Configurator, Thread):
-
+class FreezeDetect(Configurator):
     __WELCOME = '''----------------------------------------------------------------------------------
 Compa Framework WathcDog is a helper tool
 It helps to execute tests automatically after CoFW crashes
@@ -81,6 +81,7 @@ To Close Click On GUI Window and Press Escape
         elif Automating_System.MouseHandler.is_it_freezed('ObjRefErr') == True:
             FreezeDetect.console_log(Logger.FR_FR2)
             self.kill_process()
+        self.is_it_finished()
         try:
             ag.hotkey('numlock')
         except ag.FailSafeException:
@@ -88,9 +89,18 @@ To Close Click On GUI Window and Press Escape
         cyclicThread = Timer(self.MAX_WAIT_TIME, self.watchdogTimer)
         cyclicThread.start()
 
+    def do_after_freeze(self):
+        '''Open The requested Program'''
+        if self.isc_framework == 'True':
+            command = 'start ./Framework/CoFramework.exe /u developer /InstrumentRegistry.OpenInstruments FXR1,FXR2,CAN1,CAN2,Colibri1,MFSAT0,PS1'
+            self.process = Popen(command, shell=True, stdout=PIPE)
+            self.process.wait()
+        elif self.isc_framework == 'False':
+            call(r'./Compa Framework.cmd')
+
     def kill_prcess(self):
         for proc in process_iter():
-                # check whether the process name matches
+            # check whether the process name matches
             if proc.name() == self.process_name:
                 proc.kill()
 
@@ -100,9 +110,10 @@ To Close Click On GUI Window and Press Escape
         GUI.CONSOLE_MESSAGE.put(message + str(Logger.current_time()))
         Logger.logging(message + str(Logger.current_time()))
 
-    def get_remaining_tests(self):
+    def get_remaining_tests(self, result=False):
         '''
         This function is parsing the report and return the skipped tests
+        :param: if restult is True returns the failed testcases
         :return: lisst about the remaining tests
         :return: False if the directory is empty
         :return: True if all test finished '''
@@ -115,6 +126,10 @@ To Close Click On GUI Window and Press Escape
         self.all_test = Parser.XmlParser.XML_ATTRS['all']
         Parser.XmlParser(latest_report).get_testnames()
         #-- Check which tests are executed
+        if result:
+            Parser.XmlParser(latest_report).get_failedtestnames()
+            self.failed_tests = Parser.XmlParser.XML_FAILED
+            return self.failed_tests
         executed_tests = Parser.XmlParser.XML_ATTRS['name']
         skipped_tests = [i for i in self.all_test if i not in executed_tests]
         #-- If no skipped tests it means no remaining test
@@ -131,20 +146,29 @@ To Close Click On GUI Window and Press Escape
             FreezeDetect.console_log(Logger.NO_REPORT)
             return False
         if self.get_remaining_tests() is True:
-            #-- If all test finished parse for stats...
-            FreezeDetect.console_log(Logger.TEST_FINISH)
-            Logger.parse_stats()
-            sleep(10)
-            _exit(0)
-
-    def do_after_freeze(self):
-        '''Open The requested Program'''
-        if self.isc_framework is True:
-            command = 'start ./Framework/CoFramework.exe /u developer /InstrumentRegistry.OpenInstruments FXR1,FXR2,CAN1,CAN2,Colibri1,MFSAT0,PS1'
-            self.process = Popen(command, shell=True, stdout=PIPE)
-            self.process.wait()
-        elif self.isc_framework is False:
-            os.system(os.system('Compa Framework \\- for LIN.cmd'))
+            #-- Check if all True If All True: Congratulations
+            self.listsofFailed = self.get_remaining_tests(result=True)
+            if len(self.listsofFailed) == 0:
+                Logger.parse_stats()
+                sleep(10)
+                _exit(0)
+            #--If not recheck for duplicate test cases
+            else:
+                #--if found duplicate test cases quit
+                if not Parser.ListCreator.check_equal(self.listsofFailed):
+                    self.console_log('Duplicated elemtns found.')
+                    sleep(10)
+                    _exit(0)
+                #--if no duplicates Delete All failed & Quit from Framework
+                else:
+                    self.kill_prcess()
+                    latest_report = ReportHandler(self.report_path).latest_creation_date()
+                    Parser.XmlParser.delete_failedtest(
+                        latest_report,
+                        self.listsofFailed,
+                        latest_report)
+                GUI.CONSOLE_MESSAGE.put(Logger.RERUN)
+                sleep(10)
 
     def runprocesses(self):
         '''The function is looking for XML files in the directory. If found the Parser

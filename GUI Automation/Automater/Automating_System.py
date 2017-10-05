@@ -76,16 +76,7 @@ except ImportError:
 class MouseHandler():
 
     def __init__(self):
-        self.__fail_safe = False
-        self.__delay_time = 0.4
-
-    @property
-    def delay_time(self):
-        return self.__delay_time
-
-    @delay_time.setter
-    def delay_time(self, value):
-        ag.PAUSE = value
+        self.__fail_safe = True
 
     @property
     def fail_safe(self):
@@ -141,25 +132,42 @@ class MouseHandler():
             return False
 
 
-class Process_Container(object, Configurator):
+class Process_Container(Configurator):
     """This class is containing all of the important processes
     what is required to deal with CoFw. Mostly related to test execution.
     """
 
     def __init__(self, testlistpath):
+        Configurator.__init__(self)
         self.testlistpath = testlistpath
         self.moveto = MouseHandler()
+        self.__delay_time = 0.4
+        ag.PAUSE = self.__delay_time
+
+    @property
+    def delay_time(self):
+        return self.__delay_time
+
+    @delay_time.setter
+    def delay_time(self, value):
+        self.__delay_time = value
 
     def runTest(self, testname):
-        ag.hotkey('enter')
+        if self.isc_framework == 'True':
+            ag.hotkey('enter')
+        elif self.isc_framework == 'False':
+            ag.hotkey('enter')
+            ag.hotkey('enter')
         self.moveto.click_to('Plugin_Panel')
         self.moveto.click_to('Variation_Plugin')
         ag.hotkey('enter')
         self.moveto.click_to('Add_Testlist')
+        ag.PAUSE = 0.1
         self.path_converter(Configurator().testlistpath + testname)
-        sleep(1)
-        ag.hotkey('enter')
-        ag.hotkey('enter')
+        ag.PAUSE = self.__delay_time
+        for i in range(0, 3):
+            sleep(1)
+            ag.hotkey('enter')
         sleep(1)
         self.moveto.click_to('run')
         self.moveto.click_to('Run_List')

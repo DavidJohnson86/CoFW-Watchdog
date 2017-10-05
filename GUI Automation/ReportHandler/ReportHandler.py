@@ -42,6 +42,8 @@ class Logger():
     FR_FR1 = "[CONSOLE]: Compa Framework Stopped working execution "
     FR_FR2 = "[CONSOLE]: Object Reference has not set to an instance object "
     DUPLICATE = "[CONSOLE]: Duplicated testcases found rerun not possible "
+    RERUN = "[CONSOLE]: Recursive Rerunning Continues"
+    SUMMARY = "-------------------------------------Summary-------------------------------------\n"
     _start_date = None
     _end_date = None
     _freeze_counter1 = 0
@@ -80,18 +82,20 @@ class Logger():
                 Logger._end_date = ' '.join(row.strip().split(' ')[-2:])
         logfile.close()
         logfile = open(pathdir + '\\Logs\\' + 'ErrorLog', "a")
-        logfile.write('Summary:\n')
-        logfile.write('Compa Framework Stopped working execution freeze occured ' +
+        logfile.write(Logger.SUMMARY)
+        logfile.write(Logger.FR_FR1 +
+                      'freeze occured ' +
                       str(Logger._freeze_counter1) +
                       ' times.\n')
-        logfile.write('Object Reference has not set to an instance object freeze occured ' +
+        logfile.write(Logger.FR_FR2 +
+                      'freeze occured ' +
                       str(Logger._freeze_counter2) +
                       ' times.\n')
         Logger._sum_freeze_counter = Logger._freeze_counter1 + Logger._freeze_counter2
-        logfile.write('Compa Framework Freezed totally ' +
+        logfile.write('[CONSOLE]: Compa Framework Freezed totally ' +
                       str(Logger._sum_freeze_counter) +
                       ' times during execution.\n')
-        logfile.write('From Date: ' +
+        logfile.write('[CONSOLE]: From Date: ' +
                       str(Logger._start_date) + ' until ' + str(Logger._end_date))
         logfile.close()
 

@@ -68,6 +68,10 @@ class Transfer_Msg():
 
 if __name__ == '__main__':
 
-    Transfer_Msg.CONSOLE_MESSAGE.put('Test')
+    Transfer_Msg.CONSOLE_MESSAGE.put('''-----------------------------------Summary-------------------------------------
+[CONSOLE]: Compa Framework Stopped working execution freeze occured 94 times.
+[CONSOLE]: Object Reference has not set to an instance object freeze occured 266 times.
+[CONSOLE]: Compa Framework Freezed totally 360 times during execution.
+[CONSOLE]: From Date: Framework frezzed until 2017-10-03 19:59:18''')
     Transfer_Msg.CONSOLE_MESSAGE.put('Test')
     GUI()

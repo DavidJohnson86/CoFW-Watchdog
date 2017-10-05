@@ -119,12 +119,153 @@
 [CONSOLE]: screen grab failed2017-10-02 13:38:13
 [CONSOLE]: screen grab failed2017-10-02 13:38:23
 [CONSOLE]: screen grab failed2017-10-02 13:38:23
-Summary:
-Compa Framework Stopped working execution freeze occured 42 times.
-Object Reference has not set to an instance object freeze occured 120 times.
-Compa Framework Freezed totally 162 times during execution.
-From Date: 2017-09-29 07:37:24 until 2017-10-02 13:33:28Summary:
-Compa Framework Stopped working execution freeze occured 43 times.
-Object Reference has not set to an instance object freeze occured 125 times.
-Compa Framework Freezed totally 168 times during execution.
-From Date: 2017-09-29 07:37:24 until 2017-10-02 13:33:28
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 13:58:56
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-02 13:59:41
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 13:59:52
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 14:03:02
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 14:03:13
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 15:09:59
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 15:10:10
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 15:43:09
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 15:43:20
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 16:20:50
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 16:21:01
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 16:27:51
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 16:28:02
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 16:41:40
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 16:41:51
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 16:55:29
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 16:55:40
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-02 16:56:24
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 16:56:35
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 17:03:36
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 17:03:46
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-02 17:04:31
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 17:04:41
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 17:48:07
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 17:48:18
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 18:08:33
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 18:08:44
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 18:16:27
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 18:16:37
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-02 18:17:22
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 18:17:32
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 18:21:56
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 18:22:07
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 18:46:01
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 18:46:12
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 18:53:44
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 18:53:55
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 18:58:19
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 18:58:30
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-02 18:59:14
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 18:59:24
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 19:29:37
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 19:29:48
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 19:43:26
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 19:43:37
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 19:53:36
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 19:53:46
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-02 19:54:31
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 19:54:41
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 19:58:23
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 19:58:34
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 20:07:19
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 20:07:30
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 20:13:07
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 20:13:18
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 20:36:42
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 20:36:53
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 20:45:49
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 20:45:59
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 20:57:12
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 20:57:22
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 21:11:53
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 21:12:04
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-02 21:12:49
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 21:12:59
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 21:49:38
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 21:49:48
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 22:13:02
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 22:13:12
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 22:31:44
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 22:31:54
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 22:59:30
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 22:59:40
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-02 23:00:25
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 23:00:35
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-02 23:47:31
+[CONSOLE]: Framework has been closed restarting it 2017-10-02 23:47:42
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 00:00:28
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 00:00:39
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 07:17:19
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 07:17:30
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 07:32:22
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 07:32:33
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 08:54:32
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 08:57:44
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 09:54:46
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 09:54:56
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 10:01:58
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 10:02:08
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 10:15:48
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 10:15:58
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 10:53:19
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 10:53:29
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 10:57:54
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 10:58:05
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 11:16:36
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 11:16:47
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 11:21:11
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 11:21:22
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 12:00:37
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 12:00:47
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 12:21:35
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 12:21:46
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 12:22:31
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 12:22:41
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 13:46:14
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 13:46:25
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 13:47:10
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 13:47:21
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 14:15:29
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 14:15:39
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 14:16:25
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 14:16:35
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 15:14:30
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 15:14:40
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 15:22:55
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 15:23:06
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 15:51:24
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 15:51:35
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 18:36:10
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 18:36:20
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 18:37:06
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 18:37:17
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 18:49:43
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 18:49:54
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 19:10:22
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:10:32
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 19:11:18
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:11:29
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:29:51
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 19:30:37
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:30:48
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 19:33:08
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:33:18
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 19:34:05
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:34:15
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 19:46:43
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:46:53
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 19:47:39
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:47:49
+[CONSOLE]: Compa Framework Stopped working execution 2017-10-03 19:58:11
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:58:21
+[CONSOLE]: Object Reference has not set to an instance object 2017-10-03 19:59:07
+[CONSOLE]: Framework has been closed restarting it 2017-10-03 19:59:18
+[CONSOLE]: All test finished. Quitting...2017-10-04 09:52:16
+-------------------------------------Summary-------------------------------------
+[CONSOLE]: Compa Framework Stopped working execution freeze occured 94 times.
+[CONSOLE]: Object Reference has not set to an instance object freeze occured 265 times.
+[CONSOLE]: Compa Framework Freezed totally 359 times during execution.
+[CONSOLE]: From Date: 2017-09-29 07:37:24 until 2017-10-03 19:59:18

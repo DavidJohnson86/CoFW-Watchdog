@@ -118,105 +118,101 @@ class Configurator(object):
 
     console_message = Queue()
 
-    def _init_(self):
-        try:
-            self._timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            self._co_fw_dir_path = Parser.XmlParser.XML_CONFIG['COFWDIRPATH']
-            self._co_fw_path = Parser.XmlParser.XML_CONFIG['COFWPATH']
-            self._co_fw_exe = Parser.XmlParser.XML_CONFIG['COFWEXE']
-            self._report_path = Parser.XmlParser.XML_CONFIG['REPORT']
-            self._testlistpath = Parser.XmlParser.XML_CONFIG['TESTLISTPATH']
-            self._testlist_sample = Parser.XmlParser.XML_CONFIG['TESTLISTSAMPLE']
-            self._process_name = self._co_fw_exe.split('\\')[-1]
-            self._bslash_modifier = Parser.XmlParser.XML_CONFIG['BSLASHMODIFIER']
-            self._bslash_btn = Parser.XmlParser.XML_CONFIG['BSLASHBUTTON']
-            self._isc_framework = Parser.XmlParser.XML_CONFIG['ISCFRAMEWORK']
-            self._finish_detection = True
-            Configurator.console_message.put('[CONSOLE]: Init Success')
-        except Exception:
-            Configurator.console_message.put('[CONSOLE]: Init Failed. Config Error !')
-            sleep(5)
-            os._exit(0)
+    def __init__(self):
+        self.__timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.__co_fw_dir_path = Parser.XmlParser.XML_CONFIG['COFWDIRPATH']
+        self.__co_fw_path = Parser.XmlParser.XML_CONFIG['COFWPATH']
+        self.__co_fw_exe = Parser.XmlParser.XML_CONFIG['COFWEXE']
+        self.__report_path = Parser.XmlParser.XML_CONFIG['REPORT']
+        self.__testlistpath = Parser.XmlParser.XML_CONFIG['TESTLISTPATH']
+        self.__testlist_sample = Parser.XmlParser.XML_CONFIG['TESTLISTSAMPLE']
+        self.__process_name = self.__co_fw_exe.split('\\')[-1]
+        self.__bslash_modifier = Parser.XmlParser.XML_CONFIG['BSLASHMODIFIER']
+        self.__bslash_btn = Parser.XmlParser.XML_CONFIG['BSLASHBUTTON']
+        self.__isc_framework = Parser.XmlParser.XML_CONFIG['ISCFRAMEWORK']
+        self.__finish_detection = True
+        Configurator.console_message.put('[CONSOLE]: Init Success')
+        Configurator.console_message.put('[CONSOLE]: Init Failed. Config Error !')
 
     @property
     def timestamp(self):
-        return self._timestamp
+        return self.__timestamp
 
     @property
     def co_fw_dir_path(self):
-        return self._co_fw_dir_path
+        return self.__co_fw_dir_path
 
     @property
     def co_fw_path(self):
-        return self._co_fw_path
+        return self.__co_fw_path
 
     @property
     def co_fw_exe(self):
-        return self._co_fw_exe
+        return self.__co_fw_exe
 
     @property
     def report_path(self):
-        return self._report_path
+        return self.__report_path
 
     @property
     def testlistpath(self):
-        return self._testlistpath
+        return self.__testlistpath
 
     @property
     def testlist_sample(self):
-        return self._testlist_sample
+        return self.__testlist_sample
 
     @property
     def process_name(self):
-        return self._process_name
+        return self.__process_name
 
     @property
     def isc_framework(self):
-        return self._isc_framework
+        return self.__isc_framework
 
     @property
     def finish_detection(self):
-        return self._finish_detection
+        return self.__finish_detection
 
     @co_fw_dir_path.setter
     def co_fw_dir_path(self, value):
-        self._co_fw_dir_path = value
+        self.__co_fw_dir_path = value
 
     @co_fw_path.setter
     def co_fw_path(self, value):
-        self._co_fw_path = value
+        self.__co_fw_path = value
 
     @co_fw_exe.setter
     def co_fw_exe(self, value):
-        self._co_fw_exe = value
+        self.__co_fw_exe = value
 
     @report_path.setter
     def report_path(self, value):
-        self._report_path = value
+        self.__report_path = value
 
     @testlistpath.setter
     def testlistpath(self, value):
-        self._testlistpath = value
+        self.__testlistpath = value
 
     @testlist_sample.setter
     def testlist_sample(self, value):
-        self._testlist_sample = value
+        self.__testlist_sample = value
 
     @process_name.setter
     def process_name(self, value):
-        self._PROCES_NAME = value
+        self.__PROCES_NAME = value
 
     @finish_detection.setter
     def finish_detection(self, value):
-        self._co_fw_dir_path = value
+        self.__finish_detectionh = value
 
     @property
     def bslash_modifier(self):
-        return self._bslash_modifier
+        return self.__bslash_modifier
 
     @property
     def bslash_btn(self):
-        return self._bslash_btn
+        return self.__bslash_btn
 
 
 def worker():
@@ -226,9 +222,9 @@ def worker():
     except ag.FailSafeException:
         App.GUI.failSafeHandler()
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     try:
-        config_source = os.path.dirname(os.path.realpath(__file__)) + '\\Config\CoFW_Wathcdog.xml'
+        config_source = os.path.dirname(os.path.realpath(__file__)) + '\\Config\CoFW_Watchdog.xml'
     except NameError:  # We are the main CX_Freeze script not the module
         import sys
         config_source = os.path.dirname(
@@ -238,7 +234,6 @@ if _name_ == "_main_":
         Parser.XmlParser(config_source).get_config()
     except AttributeError:
         App.GUI.errorHandler('The Configuration file corrupted or not exist.')
-        os._exit(0)
     init = Configurator()
     try:
         os.chdir(init.co_fw_dir_path)
